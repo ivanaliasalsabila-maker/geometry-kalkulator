@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geometry Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.75);
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #000;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 100px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    label, select, input {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    select, input {
+      background: #eee;
+      color: #000;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 18px;
+      background-color: #00bfff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #009acd;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>Geometry Area & Volume Calculator</h1>
+
+    <label for="shape">Choose a shape:</label>
+    <select id="shape" onchange="showInputs()">
+      <option value="">-- Select Shape --</option>
+      <option value="square">Square</option>
+      <option value="rectangle">Rectangle</option>
+      <option value="circle">Circle</option>
+      <option value="triangle">Triangle</option>
+      <option value="cube">Cube</option>
+      <option value="rect_prism">Rectangular Prism</option>
+      <option value="cylinder">Cylinder</option>
+      <option value="sphere">Sphere</option>
+    </select>
+
+    <div id="inputs"></div>
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function showInputs() {
+      const shape = document.getElementById("shape").value;
+      const inputs = document.getElementById("inputs");
+      let html = "";
+
+      switch (shape) {
+        case "square":
+          html = `<label>Side Length:</label><input type="number" id="a">`;
+          break;
+        case "rectangle":
+          html = `
+            <label>Length:</label><input type="number" id="l">
+            <label>Width:</label><input type="number" id="w">
+          `;
+          break;
+        case "circle":
+          html = `<label>Radius:</label><input type="number" id="r">`;
+          break;
+        case "triangle":
+          html = `
+            <label>Base:</label><input type="number" id="b">
+            <label>Height:</label><input type="number" id="h">
+          `;
+          break;
+        case "cube":
+          html = `<label>Side Length:</label><input type="number" id="s">`;
+          break;
+        case "rect_prism":
+          html = `
+            <label>Length:</label><input type="number" id="pl">
+            <label>Width:</label><input type="number" id="pw">
+            <label>Height:</label><input type="number" id="ph">
+          `;
+          break;
+        case "cylinder":
+          html = `
+            <label>Radius:</label><input type="number" id="cr">
+            <label>Height:</label><input type="number" id="ch">
+          `;
+          break;
+        case "sphere":
+          html = `<label>Radius:</label><input type="number" id="sr">`;
+          break;
+      }
+
+      inputs.innerHTML = html;
+      document.getElementById("result").textContent = "";
+    }
+
+    function calculate() {
+      const shape = document.getElementById("shape").value;
+      let result = "";
+
+      switch (shape) {
+        case "square":
+          const a = parseFloat(document.getElementById("a").value);
+          if (!isNaN(a)) result = `Area = ${a * a}`;
+          break;
+        case "rectangle":
+          const l = parseFloat(document.getElementById("l").value);
+          const w = parseFloat(document.getElementById("w").value);
+          if (!isNaN(l) && !isNaN(w)) result = `Area = ${l * w}`;
+          break;
+        case "circle":
+          const r = parseFloat(document.getElementById("r").value);
+          if (!isNaN(r)) result = `Area = ${(Math.PI * r * r).toFixed(2)}`;
+          break;
+        case "triangle":
+          const b = parseFloat(document.getElementById("b").value);
+          const h = parseFloat(document.getElementById("h").value);
+          if (!isNaN(b) && !isNaN(h)) result = `Area = ${(0.5 * b * h).toFixed(2)}`;
+          break;
+        case "cube":
+          const s = parseFloat(document.getElementById("s").value);
+          if (!isNaN(s)) result = `Volume = ${Math.pow(s, 3)}`;
+          break;
+        case "rect_prism":
+          const pl = parseFloat(document.getElementById("pl").value);
+          const pw = parseFloat(document.getElementById("pw").value);
+          const ph = parseFloat(document.getElementById("ph").value);
+          if (!isNaN(pl) && !isNaN(pw) && !isNaN(ph)) {
+            result = `Volume = ${(pl * pw * ph).toFixed(2)}`;
+          }
+          break;
+        case "cylinder":
+          const cr = parseFloat(document.getElementById("cr").value);
+          const ch = parseFloat(document.getElementById("ch").value);
+          if (!isNaN(cr) && !isNaN(ch)) {
+            const area = (2 * Math.PI * cr * (cr + ch)).toFixed(2);
+            const volume = (Math.PI * cr * cr * ch).toFixed(2);
+            result = `Surface Area = ${area}, Volume = ${volume}`;
+          }
+          break;
+        case "sphere":
+          const sr = parseFloat(document.getElementById("sr").value);
+          if (!isNaN(sr)) {
+            const area = (4 * Math.PI * sr * sr).toFixed(2);
+            const volume = ((4 / 3) * Math.PI * sr ** 3).toFixed(2);
+            result = `Surface Area = ${area}, Volume = ${volume}`;
+          }
+          break;
+        default:
+          result = "Please select a shape and enter values.";
+      }
+
+      document.getElementById("result").textContent = result || "Please enter valid numbers.";
+    }
+  </script>
+</body>
+</html>
